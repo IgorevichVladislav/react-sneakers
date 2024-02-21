@@ -1,7 +1,7 @@
 import React from 'react';
 import cl from './Card.module.scss';
 
-const Card = (props) => {
+const Card = ({title, src, price, onFavorite, onClickAddCard}) => {
 
     const cardImagesArray = [
         {id: 1, src: "/img/sneakers/nike-blazer-mid-suede-green.png", alt: "Nike"},
@@ -20,7 +20,8 @@ const Card = (props) => {
 
     const [isAdded, setIsAdded] = React.useState(false);
     const handleClick = () => {
-        setIsAdded(!isAdded)
+        onClickAddCard({title, src, price});
+        setIsAdded(!isAdded);
     }
 
     React.useEffect(() => {
@@ -28,19 +29,21 @@ console.log('gfgfgf')
         },
         [handleClick])
 
+
+
     return (
         <div>
             <div className={cl.card}>
-                <div className={cl.favorite} onClick={props.onFavorite}>
+                <div className={cl.favorite} onClick={onFavorite}>
                     <img src='/img/icons/heart-unliked.svg' alt="Heart Unlike"/>
                 </div>
-                <img width={133} height={112} src={props.src} alt="Nike"/>
-                <p>{props.title}</p>
+                <img width={133} height={112} src={src} alt="Nike"/>
+                <p>{title}</p>
                 <div className='d-flex justify-between align-center'>
                     <div className='d-flex flex-column'>
                         <span className='text-uppercase'>Цена:</span>
 
-                        <strong>{props.price} руб.</strong>
+                        <strong>{price} руб.</strong>
                     </div>
                         <img className={cl.plus} onClick={handleClick}
                              src={isAdded ? '/img/icons/btn-cheked.svg' : '/img/icons/btn-plus.svg'}
