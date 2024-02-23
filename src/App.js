@@ -1,44 +1,73 @@
 import React from "react";
+import axios from "axios";
 import Card from "./components/Card/Card";
 import Header from "./components/Header";
-import Drawer from "./components/Drawer";
+import Drawer from "./components/Drawer/Drawer";
 
 function App() {
 
-    const [cartOpened, setCartOpened] = React.useState(false);
     const [items, setItems] = React.useState([]);
     const [cartItems, setCartItems] = React.useState([]);
+    const [searchValue, setSearchValue] = React.useState('');
+    const [cartOpened, setCartOpened] = React.useState(false);
+
 
     React.useEffect(() => {
-        fetch('https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/items')
-            .then(response => response.json())
-            .then(json => setItems(json))
+        axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/items")
+            .then(response => setItems(response.data))
+            .catch(err => alert(err))
+        // {console.log(setItems, 'setItems')}
+        axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart")
+            .then(response => setCartItems(response.data))
+            .catch(err => alert(err))
+        // {console.log(setCartItems, 'setCartItems')}
     }, [])
 
     const onAddToCard = (obj) => {
-        setCartItems(prev => [...cartItems, obj]);
+        axios.post("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart", obj)
+        setCartItems(prev => [...prev, obj]);
     }
-    console.log(cartItems)
+
+    const onRemoveCartItem = (id) => {
+        axios.delete(`https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart/${id}`)
+console.log(id)
+        setCartItems(prev => prev.filter(item => item.id !== id))
+    }
+    const onChangeSearchInput = event => setSearchValue(event.target.value);
 
     return (
         <div className="wrapper clear">
 
-            {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)}/>}
+            {cartOpened && <Drawer
+                items={cartItems}
+                onClose={() => setCartOpened(false)}
+                onRemove={onRemoveCartItem}
+            />}
+
             <Header onClickCart={() => setCartOpened(true)}/>
 
             <div className="content">
                 <div className='d-flex justify-between align-center mb-40'>
-                    <h1>Все кроссовки</h1>
-                    <div className='search-block d-flex align-center'>
+
+                    <h1>{searchValue ? `Поиск по запросу: '${searchValue}'` : 'Все кроссовки'}</h1>
+                    <div className='search-block d-flex align-center '>
                         <img className='search-img' src="/img/icons/search.svg" alt="Search"/>
-                        <input type="text" placeholder='Поиск...'/>
+                        {searchValue && <img className='removeSearch cu-p clear'
+                                             src='/img/icons/btn-remove.svg'
+                                             alt="Remove Search"
+                                             onClick={() => setSearchValue('')}
+                        />}
+                        <input
+                            value={searchValue}
+                            onChange={onChangeSearchInput}
+                            type="text" placeholder='Поиск...'/>
                     </div>
                 </div>
                 <div className='cardItem'>
 
-                    {items.map((title, index) =>
+                    {items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((title, index) =>
                         <Card
-                            key={index}
+                            key={index + 1}
                             title={title.title}
                             price={title.price}
                             src={title.src}
