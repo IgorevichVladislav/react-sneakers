@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState} from "react";
 import cl from './Card.module.scss';
 
 const Card = ({title, src, price, onFavorite, onClickAddCard}) => {
@@ -18,17 +19,31 @@ const Card = ({title, src, price, onFavorite, onClickAddCard}) => {
     //
     // ];
 
-    const [isAdded, setIsAdded] = React.useState(false);
+    const [isAdded, setIsAdded] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false)
+
     const handleClick = () => {
         onClickAddCard({title, src, price});
         setIsAdded(!isAdded);
     }
 
+    const onClickFavorite = () => {
+        setIsFavorite(!isFavorite)
+        onFavorite({title, src, price})
+    //Если isFavorite равно true, то !isFavorite будет равно false,
+    // что означает, что товар больше не является избранным.
+    // Если isFavorite равно false, то !isFavorite будет равно true,
+    // что означает, что товар становится избранным.
+    }
+
     return (
         <div>
             <div className={cl.card}>
-                <div className={cl.favorite} onClick={onFavorite}>
-                    <img src='/img/icons/heart-unliked.svg' alt="Heart Unlike"/>
+                <div className={cl.favorite} onClick={onClickFavorite}>
+                    <img src={isFavorite
+                        ? '/img/icons/heart-liked.svg'
+                        : '/img/icons/heart-unliked.svg'}
+                         alt="Heart Unlike"/>
                 </div>
                 <img width={133} height={112} src={src} alt="Nike"/>
                 <p>{title}</p>
@@ -38,9 +53,9 @@ const Card = ({title, src, price, onFavorite, onClickAddCard}) => {
 
                         <strong>{price} руб.</strong>
                     </div>
-                        <img className={cl.plus} onClick={handleClick}
-                             src={isAdded ? '/img/icons/btn-cheked.svg' : '/img/icons/btn-plus.svg'}
-                             alt="Plus"/>
+                    <img className={cl.plus} onClick={handleClick}
+                         src={isAdded ? '/img/icons/btn-cheked.svg' : '/img/icons/btn-plus.svg'}
+                         alt="Plus"/>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import CartEmpty from "../CartEmpty/CartEmpty";
-import CartButton from "../CartButton/CartButton";
-import CartItems from "../CartItems/CartItems";
+import CartEmpty from "../Cart/CartEmpty/CartEmpty";
+import CartButton from "../Cart/CartButton/CartButton";
+import CartItems from "../Cart/CartItems/CartItems";
 import cl from './Drawer.module.scss'
 
 const Drawer = ({items = [], onClose, onRemove}) => {
@@ -22,7 +22,7 @@ const Drawer = ({items = [], onClose, onRemove}) => {
                         <CartItems items={items} onRemoveDrawProp={onRemove} />
                         :
                         <CartEmpty>
-                            <CartButton/>
+                            <CartButton onClose={onClose} />
                         </CartEmpty>
                 }
 

@@ -1,0 +1,19 @@
+.header {
+  padding: 45px 60px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+
+  img {
+    margin-right: 15px;
+  }
+
+  ul {
+    li {
+      cursor: pointer;
+    }
+    li:not(:last-child) span {
+      margin-right: 32px;
+    }
+  }
+}

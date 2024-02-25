@@ -1,18 +1,22 @@
 import React from "react";
+import {useState, useEffect} from "react";
+import {Route, Routes} from 'react-router-dom';
 import axios from "axios";
-import Card from "./components/Card/Card";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Drawer from "./components/Drawer/Drawer";
+import SearchInput from "./components/UI/SearchInput/SearchInput";
+import Home from "./pages/Home";
 
 function App() {
 
-    const [items, setItems] = React.useState([]);
-    const [cartItems, setCartItems] = React.useState([]);
-    const [searchValue, setSearchValue] = React.useState('');
-    const [cartOpened, setCartOpened] = React.useState(false);
+    const [items, setItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+    const [favorites, setFavorites] = useState([])
+    const [searchValue, setSearchValue] = useState('');
+    const [cartOpened, setCartOpened] = useState(false);
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/items")
             .then(response => setItems(response.data))
             .catch(err => alert(err))
@@ -25,14 +29,35 @@ function App() {
 
     const onAddToCard = (obj) => {
         axios.post("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart", obj)
-        setCartItems(prev => [...prev, obj]);
+            .then(response => {
+                setCartItems(prev => [...prev, response.data]);
+            })
+            .catch(error => {
+                console.error("Error adding item to the cart:", error);
+            });
     }
 
     const onRemoveCartItem = (id) => {
         axios.delete(`https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart/${id}`)
-console.log(id)
-        setCartItems(prev => prev.filter(item => item.id !== id))
+            .then(() => {
+                setCartItems(prev => prev.filter(item => item.id !== id));
+            })
+            .catch(error => {
+                console.error("Error removing item from the cart:", error);
+            });
     }
+
+    const onAddToFavorite = () => {
+        //     axios.post("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/favorites", obj)
+        // .then(response => {
+        //         setFavorites(prev => [...prev, response.data]);
+        //     })
+        //         .catch(error => {
+        //             console.error("Error adding item to the cart:", error);
+        //         });
+    }
+
+
     const onChangeSearchInput = event => setSearchValue(event.target.value);
 
     return (
@@ -46,39 +71,26 @@ console.log(id)
 
             <Header onClickCart={() => setCartOpened(true)}/>
 
-            <div className="content">
-                <div className='d-flex justify-between align-center mb-40'>
-
-                    <h1>{searchValue ? `Поиск по запросу: '${searchValue}'` : 'Все кроссовки'}</h1>
-                    <div className='search-block d-flex align-center '>
-                        <img className='search-img' src="/img/icons/search.svg" alt="Search"/>
-                        {searchValue && <img className='removeSearch cu-p clear'
-                                             src='/img/icons/btn-remove.svg'
-                                             alt="Remove Search"
-                                             onClick={() => setSearchValue('')}
-                        />}
-                        <input
-                            value={searchValue}
-                            onChange={onChangeSearchInput}
-                            type="text" placeholder='Поиск...'/>
-                    </div>
-                </div>
-                <div className='cardItem'>
-
-                    {items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((title, index) =>
-                        <Card
-                            key={index + 1}
-                            title={title.title}
-                            price={title.price}
-                            src={title.src}
-                            onFavorite={() => console.log('Добавили в закладки')}
-                            onClickAddCard={(obj) => onAddToCard(obj)}
-                        />)}
-                </div>
-            </div>
+            <Routes>
+                <Route path='/'
+                       element={
+                           <Home
+                               items={items}
+                               searchValue={searchValue}
+                               setSearchValue={setSearchValue}
+                               onChangeSearchInput={onChangeSearchInput}
+                               onAddToFavorite={onAddToFavorite}
+                               onAddToCard={onAddToCard}
+                           />
+                       }
+                       exact
+                />
+            </Routes>
 
         </div>
     );
 }
 
 export default App;
+
+
