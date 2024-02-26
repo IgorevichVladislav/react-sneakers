@@ -26,9 +26,9 @@ const Header = (props) => {
                 <li>
                     <Link to='favorites'>
                         <img width={18} height={18} src='/img/icons/like.svg'/>
-                    </Link>
 
                     <span>Закладки</span>
+                    </Link>
                 </li>
                 <li>
 

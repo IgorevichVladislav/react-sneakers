@@ -3,9 +3,9 @@ import cl from './SearchInput.module.scss'
 
 const SearchInput = ({searchValue, setSearchValue, onChangeSearchInput}) => {
     return (
-        <div className='search-block d-flex align-center '>
-            <img className='search-img' src="/img/icons/search.svg" alt="Search"/>
-            {searchValue && <img className='removeSearch cu-p clear'
+        <div className={cl.searchBlock}>
+            <img className={cl.searchImg} src="/img/icons/search.svg" alt="Search"/>
+            {searchValue && <img className={`${cl.removeSearch} ${cl.clear}`}
                                  src='/img/icons/btn-remove.svg'
                                  alt="Remove Search"
                                  onClick={() => setSearchValue('')}

@@ -4,8 +4,8 @@ import {Route, Routes} from 'react-router-dom';
 import axios from "axios";
 import Header from "./components/Header/Header";
 import Drawer from "./components/Drawer/Drawer";
-import SearchInput from "./components/UI/SearchInput/SearchInput";
 import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
 
 function App() {
 
@@ -24,7 +24,11 @@ function App() {
         axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart")
             .then(response => setCartItems(response.data))
             .catch(err => alert(err))
-        // {console.log(setCartItems, 'setCartItems')}
+
+        axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/cart")
+            .then(response => setFavorites(response.data))
+            .catch(err => alert(err))
+
     }, [])
 
     const onAddToCard = (obj) => {
@@ -48,15 +52,14 @@ function App() {
     }
 
     const onAddToFavorite = () => {
-        //     axios.post("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/favorites", obj)
-        // .then(response => {
-        //         setFavorites(prev => [...prev, response.data]);
-        //     })
-        //         .catch(error => {
-        //             console.error("Error adding item to the cart:", error);
-        //         });
+        axios.get("https://65d5ec4bf6967ba8e3bcf7a8.mockapi.io/items")
+            .then(response => {
+                setFavorites(prev => [...prev, response.data]);
+            })
+            .catch(error => {
+                console.error("Error adding item to the cart:", error);
+            });
     }
-
 
     const onChangeSearchInput = event => setSearchValue(event.target.value);
 
@@ -81,6 +84,19 @@ function App() {
                                onChangeSearchInput={onChangeSearchInput}
                                onAddToFavorite={onAddToFavorite}
                                onAddToCard={onAddToCard}
+                           />
+                       }
+                       exact
+                />
+
+                <Route path='/favorites'
+                       element={
+                           <Favorites
+                               items={items}
+                               favorites={favorites}
+                               onAddToFavorite={onAddToFavorite}
+                               onAddToCard={onAddToCard}
+
                            />
                        }
                        exact

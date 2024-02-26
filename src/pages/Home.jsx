@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from "../components/Card/Card";
+import SearchInput from "../components/UI/SearchInput/SearchInput";
 
 const Home = ({
                   items,
@@ -16,24 +17,11 @@ const Home = ({
 
                 <h1>{searchValue ? `Поиск по запросу: '${searchValue}'` : 'Все кроссовки'}</h1>
 
-                {/*<SearchInput*/}
-                {/*    setSearchValue={searchValue}*/}
-                {/*    value={searchValue}*/}
-                {/*    onChange={onChangeSearchInput}*/}
-                {/*/>*/}
-
-                <div className='search-block d-flex align-center '>
-                    <img className='search-img' src="/img/icons/search.svg" alt="Search"/>
-                    {searchValue && <img className='removeSearch cu-p clear'
-                                         src='/img/icons/btn-remove.svg'
-                                         alt="Remove Search"
-                                         onClick={() => setSearchValue('')}
-                    />}
-                    <input
-                        value={searchValue}
-                        onChange={onChangeSearchInput}
-                        type="text" placeholder='Поиск...'/>
-                </div>
+                <SearchInput
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    onChangeSearchInput={onChangeSearchInput}
+                />
 
 
             </div>
