@@ -15,7 +15,7 @@
     border: none;
   }
 
-  h1, p {
+  h1, h2, p {
     margin: 0;
   }
 
@@ -37,7 +37,11 @@
     flex-wrap: wrap;
     margin-right: -40px;
     margin-bottom: -40px;
+
+    svg {
+      margin: 0 45px 40px;
   }
+}
 
 }
 

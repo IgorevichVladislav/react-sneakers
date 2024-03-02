@@ -1,64 +1,60 @@
 import React from 'react';
 import {useState} from "react";
 import cl from './Card.module.scss';
+import Loader from "../UI/Loader/Loader";
+import ContentLoader from "react-content-loader";
 
-const Card = ({title, src, price, onFavorite, onClickAddCard}) => {
+const Card = ({
+                  title,
+                  src,
+                  price,
+                  onFavorite,
+                  onClickAddCard,
+                  id,
+                  favourite,
+                  added = false,
+                  loading = false
+              }) => {
 
-    // const cardImagesArray = [
-    //     {id: 1, src: "/img/sneakers/nike-blazer-mid-suede-green.png", alt: "Nike"},
-    //     {id: 2, src: "/img/sneakers/nike-air-max-270.png", alt: "Nike"},
-    //     {id: 3, src: "/img/sneakers/nike-blazer-mid-suede-cream.png", alt: "Nike"},
-    //     {id: 4, src: "/img/sneakers/jordan-air-jordan-11.png", alt: "Nike"},
-    //     {id: 5, src: "/img/sneakers/nike-kyrie-7.png", alt: "Nike"},
-    //     {id: 6, src: "/img/sneakers/nike-kyrie-flytrap-iv.png", alt: "Nike"},
-    //     {id: 7, src: "/img/sneakers/nike-lebron-xviii.png", alt: "Nike"},
-    //     {id: 8, src: "/img/sneakers/nike-lebron-xviii-low.png", alt: "Nike"},
-    //     {id: 9, src: "/img/sneakers/puma-x-aka-boku-future-rider.png", alt: "Nike"},
-    //     {id: 10, src: "/img/sneakers/under-armour-curry 8.png", alt: "Nike"},
-    //
-    //
-    // ];
-
-    const [isAdded, setIsAdded] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false)
+    const [isAdded, setIsAdded] = useState(added);
 
     const handleClick = () => {
-        onClickAddCard({title, src, price});
+        onClickAddCard({id, title, src, price});
         setIsAdded(!isAdded);
     }
 
-    const onClickFavorite = () => {
-        setIsFavorite(!isFavorite)
-        onFavorite({title, src, price})
-    //Если isFavorite равно true, то !isFavorite будет равно false,
-    // что означает, что товар больше не является избранным.
-    // Если isFavorite равно false, то !isFavorite будет равно true,
-    // что означает, что товар становится избранным.
-    }
-
     return (
-        <div>
-            <div className={cl.card}>
-                <div className={cl.favorite} onClick={onClickFavorite}>
-                    <img src={isFavorite
-                        ? '/img/icons/heart-liked.svg'
-                        : '/img/icons/heart-unliked.svg'}
-                         alt="Heart Unlike"/>
-                </div>
-                <img width={133} height={112} src={src} alt="Nike"/>
-                <p>{title}</p>
-                <div className='d-flex justify-between align-center'>
-                    <div className='d-flex flex-column'>
-                        <span className='text-uppercase'>Цена:</span>
+        <div className={cl.card}>
+            {
+                loading
+                    ?
+                    (
+                        <Loader />
+                    ) : (
+                        <>
+                            <div className={cl.favorite} onClick={() => onFavorite(id)}>
+                                <img src={favourite
+                                    ? '/img/icons/heart-liked.svg'
+                                    : '/img/icons/heart-unliked.svg'}
+                                     alt="Heart Unlike"/>
+                            </div>
+                            <img width={133} height={112} src={src} alt="Nike"/>
+                            <p>{title}</p>
+                            <div className='d-flex justify-between align-center'>
+                                <div className='d-flex flex-column'>
+                                    <span className='text-uppercase'>Цена:</span>
 
-                        <strong>{price} руб.</strong>
-                    </div>
-                    <img className={cl.plus} onClick={handleClick}
-                         src={isAdded ? '/img/icons/btn-cheked.svg' : '/img/icons/btn-plus.svg'}
-                         alt="Plus"/>
-                </div>
-            </div>
+                                    <strong>{price} руб.</strong>
+                                </div>
+                                <img className={cl.plus} onClick={handleClick}
+                                     src={isAdded ? '/img/icons/btn-cheked.svg' : '/img/icons/btn-plus.svg'}
+                                     alt="Plus"/>
+                            </div>
+                        </>
+                    )}
+
         </div>
+
     );
 };
 

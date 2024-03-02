@@ -7,6 +7,22 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+
+  .cartName {
+    position: fixed;
+    width: 345px;
+    top: 0;
+    right: 40px;
+    z-index: 5;
+    background-color: white;
+
+    h2 {
+      padding: 30px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 }
 
 .drawer {
@@ -16,14 +32,9 @@
   background-color: #fff;
   right: 0;
   box-shadow: -10px 4px 24px 0px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: 92px 30px 30px;
   display: flex;
   flex-direction: column;
-overflow: scroll;
-
-  h2 {
-    margin: 0 0 30px 0;
-
-  }
+  overflow: scroll;
 
 }

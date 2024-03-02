@@ -6,8 +6,8 @@ const CartItems = ({items, onRemoveDrawProp}) => {
     return (
         <div className='d-flex flex-column flex'>
             <div className={cl.items}>
-                {items.map((obj, index) => (
-                    <div className={cl.cartItem} key={index}>
+                {items.map((obj) => (
+                    <div className={cl.cartItem} key={obj.id}>
 
                         <img className={cl.cartSneakersImg} width={70} height={70}
                              src={obj.src} alt="Nike"/>

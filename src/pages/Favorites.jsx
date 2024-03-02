@@ -6,21 +6,33 @@ const Favorites = ({items, onAddToCard, onAddToFavorite}) => {
 
     return (
         <div className="content">
-            <div className='d-flex justify-between align-center mb-40'>
-            <h1>Мои закладки</h1>
+
+                    <div className='d-flex justify-between align-center mb-40'>
+                        <h1 className='d-flex align-center cu-p' >
+                            <img className='mr-20' src="/img/icons/staple-left.svg" alt="Back"/>
+                            Мои закладки</h1>
+                    </div>
 
 
-            </div>
             <div className='cardItem'>
-                {items.map((title, index) =>
-                    <Card
-                        key={index + 1}
-                        title={title.title}
-                        price={title.price}
-                        src={title.src}
-                        onFavorite={(obj) => onAddToFavorite(obj)}
-                        onClickAddCard={(obj) => onAddToCard(obj)}
-                    />)}
+                {items.map((title) => {
+                    if (title.favourite) {
+                        return (
+                            <Card
+                                key={title.id}
+                                title={title.title}
+                                price={title.price}
+                                src={title.src}
+                                id={title.id}
+                                favourite={title.favourite}
+                                onFavorite={onAddToFavorite}
+                                onClickAddCard={(obj) => onAddToCard(obj)}
+                            />
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
             </div>
         </div>
     );
