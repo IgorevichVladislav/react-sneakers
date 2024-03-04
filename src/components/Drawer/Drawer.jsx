@@ -1,12 +1,22 @@
-import React from 'react';
-import CartEmpty from "../Cart/CartEmpty/CartEmpty";
+import React, {useContext, useState} from 'react';
+import Info from "../Cart/Info/Info";
 import CartButton from "../Cart/CartButton/CartButton";
 import CartItems from "../Cart/CartItems/CartItems";
 import cl from './Drawer.module.scss'
+import AppContext from "../../AppContext";
+import CartComplete from "../Cart/CartComplete/CartComplete";
 
 const Drawer = ({items = [], onClose, onRemove}) => {
+    const {setCartItems} = useContext(AppContext);
+    const [orderIsComplete, setOrderIsComplete] = useState(false);
+
+    const onClickOrder = () => {
+        setOrderIsComplete(true);
+        setCartItems([]);
+    }
+
     return (<div className={cl.overlay}>
-        <div className={cl.cartName} onChange={() => scroll( )}>
+        <div className={cl.cartName}>
             <h2>Корзина
                 <img className='removeBtn cu-p'
                      src='/img/icons/btn-remove.svg'
@@ -16,18 +26,38 @@ const Drawer = ({items = [], onClose, onRemove}) => {
             </h2>
         </div>
 
-            <div className={cl.drawer}>
+        <div className={cl.drawer}>
 
 
+            {items.length
+                ? <CartItems items={items} onRemoveDrawProp={onRemove} onClick={onClickOrder}/>
+
+                // : <CartComplete>
+                //     <CartButton onClose={onClose}/>
+                // </CartComplete>
 
 
-                {items.length ? <CartItems items={items} onRemoveDrawProp={onRemove}/> : <CartEmpty>
-                    <CartButton onClose={onClose}/>
-                </CartEmpty>}
+                : (orderIsComplete)
+                    ? <CartComplete
+                        title='Заказ оформлен!'
+                        description='Ваш заказ #18 скоро будет передан курьерской доставке'
+                    >
+                        <CartButton
+                            onClose={onClose}/>
+                    </CartComplete>
+
+                    : <Info
+                        title='Корзина пустая'
+                        description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+                        img="/img/icons/cart-epty.png">
+                        <CartButton
+                            onClose={onClose}/>
+                    </Info>
+            }
 
 
-            </div>
-        </div>);
+        </div>
+    </div>);
 };
 
 export default Drawer;

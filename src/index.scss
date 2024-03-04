@@ -1,3 +1,7 @@
+  :root {
+    --complete-color: #87c20a;
+  }
+
 * {
   font-family: 'inter', 'sans-serif';
 
@@ -5,6 +9,7 @@
     border-color: transparent;
     cursor: pointer;
   }
+
 
   input,
   button,

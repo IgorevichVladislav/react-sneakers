@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Card from "../components/Card/Card";
 import SearchInput from "../components/UI/SearchInput/SearchInput";
+import AppContext from "../AppContext";
+
 import Loader from "../components/UI/Loader/Loader";
 
 const Home = ({
@@ -14,16 +16,18 @@ const Home = ({
                   isLoading
               }) => {
 
+    const {isItemAdded} = useContext(AppContext);
+
     const renderItems = () => {
         const filterItems = items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
 
         return (
             isLoading
                 ?
-                // [...Array(10)]
-                Array.from({ length: 10 }).map((_, index) => (
-                    <Loader key={index} loading={isLoading} />
-                ))
+                [...Array(10)]
+                // Array.from({ length: 10 }).map((_, index) => (
+                //     <Loader key={index} loading={isLoading} />
+                // ))
                 : filterItems
                     .map((title, index) => (
                     <Card
@@ -35,8 +39,9 @@ const Home = ({
                         favourite={title.favourite}
                         onFavorite={onAddToFavorite}
                         onClickAddCard={obj => onAddToCard(obj)}
-                        added={cartItems.some(obj => Number(obj.id) === Number(title.id))}
-                        // loading={isLoading}
+                        added={isItemAdded(title && title.id)}
+                        loading={isLoading}
+
                     />
                 ))
         );
@@ -52,6 +57,7 @@ const Home = ({
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     onChangeSearchInput={onChangeSearchInput}
+                    loadig={isLoading}
                 />
             </div>
             <div className='cardItem'>

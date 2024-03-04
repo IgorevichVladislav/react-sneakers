@@ -1,0 +1,63 @@
+.cartTotalBlack {
+  font-size: 16px;
+
+  li {
+    margin-bottom: 20px;
+
+    span {
+      font-weight: 400;
+    }
+
+    b {
+      font-weight: 600;
+    }
+  ;
+
+    div {
+      flex: 1;
+      border-bottom: 1px dashed #dfdfdf;
+      transform: translateY(-5px);
+      margin: 0 8px 0;
+    }
+  }
+}
+
+.greenButton {
+  margin-top: 10px;
+  padding: 18px 0;
+  width: 100%;
+  border-radius: 18px;
+  background-color: #9dd558;
+  color: #fff;
+  font-weight: 600;
+  line-height: 19px;
+  transition: background-color 1s ease-in-out;
+  position: relative;
+
+
+  &:hover {
+    background-color: lighten(#9dd558, 10%);
+  }
+
+  &:active {
+    background-color: darken(#9dd558, 10%);
+
+  }
+
+  &:focus {
+    background-color: darkgreen;
+  }
+
+  img {
+    position: absolute;
+    right: 34px;
+    top: 20px;
+    transition: transform 0.4s ease-in-out;
+  }
+
+  &:hover {
+    img {
+      transform: translateX(10px);
+    }
+  }
+}

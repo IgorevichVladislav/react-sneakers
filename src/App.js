@@ -1,12 +1,14 @@
-import React from "react";
 import {useState, useEffect} from "react";
 import {Route, Routes} from 'react-router-dom';
 
 import axios from "axios";
 import Header from "./components/Header/Header";
 import Drawer from "./components/Drawer/Drawer";
+
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
+import AppContext from "./AppContext";
+
 
 function App() {
 
@@ -32,7 +34,7 @@ function App() {
                 setItems(itemsWithFavouriteAndId);
                 setCartItems(cartResponse.data);
             } catch (err) {
-                alert(err);
+                alert(err.message);
             }
         }
 
@@ -58,7 +60,7 @@ function App() {
                     setCartItems(prev => [...prev, response.data]);
                 })
                 .catch(error => {
-                    console.error("Error adding item to the cart:", error);
+                    console.error("Error adding item to the cart:", error.message);
                 });
         }
     }
@@ -72,7 +74,7 @@ function App() {
                 setCartItems(prev => prev.filter(item => item.id !== id));
             })
             .catch(error => {
-                console.error("Error removing item from the cart:", error);
+                console.error("Error removing item from the cart:", error.message);
             });
     }
 
@@ -90,48 +92,55 @@ function App() {
 
     const onChangeSearchInput = event => setSearchValue(event.target.value);
 
+    const isItemAdded = (id) => {
+        return cartItems.some(obj => Number(obj.id) === Number(id));
+    }
+
     return (
-        <div className="wrapper clear">
+        <AppContext.Provider value={{items, cartItems, isItemAdded, setCartOpened, setCartItems}}>
 
-            {cartOpened && <Drawer
-                items={cartItems}
-                onClose={() => setCartOpened(false)}
-                onRemove={onRemoveCartItem}
-            />}
 
-            <Header onClickCart={() => setCartOpened(true)}/>
+            <div className="wrapper clear">
 
-            <Routes>
-                <Route path='/'
-                       element={
-                           <Home
-                               items={items}
-                               cartItems={cartItems}
-                               searchValue={searchValue}
-                               setSearchValue={setSearchValue}
-                               onChangeSearchInput={onChangeSearchInput}
-                               onAddToFavorite={onAddToFavorite}
-                               onAddToCard={onAddToCard}
-                               isLoading={isLoading}
-                           />
-                       }
-                       exact
-                />
+                {cartOpened && <Drawer
+                    items={cartItems}
+                    onClose={() => setCartOpened(false)}
+                    onRemove={onRemoveCartItem}
+                />}
 
-                <Route path='/favorites'
-                       element={
-                           <Favorites
-                               items={items}
-                               onAddToFavorite={onAddToFavorite}
-                               onAddToCard={onAddToCard}
+                <Header onClickCart={() => setCartOpened(true)}/>
 
-                           />
-                       }
-                       exact
-                />
-            </Routes>
+                <Routes>
+                    <Route path='/'
+                           element={
+                               <Home
+                                   items={items}
+                                   cartItems={cartItems}
+                                   searchValue={searchValue}
+                                   setSearchValue={setSearchValue}
+                                   onChangeSearchInput={onChangeSearchInput}
+                                   onAddToFavorite={onAddToFavorite}
+                                   onAddToCard={onAddToCard}
+                                   isLoading={isLoading}
+                               />
+                           }
+                           exact
+                    />
 
-        </div>
+                    <Route path='/favorites'
+                           element={
+                               <Favorites
+                                   onAddToFavorite={onAddToFavorite}
+                                   onAddToCard={onAddToCard}
+
+                               />
+                           }
+                           exact
+                    />
+                </Routes>
+
+            </div>
+        </AppContext.Provider>
     );
 }
 
