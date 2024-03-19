@@ -20,15 +20,9 @@ const Home = ({
 
     const renderItems = () => {
         const filterItems = items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
-
         return (
-            isLoading
-                ?
-                [...Array(10)]
-                // Array.from({ length: 10 }).map((_, index) => (
-                //     <Loader key={index} loading={isLoading} />
-                // ))
-                : filterItems
+
+                filterItems
                     .map((title, index) => (
                     <Card
                         key={index + 1}

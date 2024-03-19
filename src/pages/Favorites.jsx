@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import AppContext from "../AppContext";
 import Card from "../components/Card/Card";
 
-
 const Favorites = ({ onAddToCard, onAddToFavorite}) => {
 
     const {items} = useContext(AppContext);
@@ -15,7 +14,6 @@ const Favorites = ({ onAddToCard, onAddToFavorite}) => {
                             <img className='mr-20' src="/img/icons/staple-left.svg" alt="Back"/>
                             Мои закладки</h1>
                     </div>
-
 
             <div className='cardItem'>
                 {items.map((title) => {
@@ -30,6 +28,7 @@ const Favorites = ({ onAddToCard, onAddToFavorite}) => {
                                 favourite={title.favourite}
                                 onFavorite={onAddToFavorite}
                                 onClickAddCard={(obj) => onAddToCard(obj)}
+                                
                             />
                         );
                     } else {
